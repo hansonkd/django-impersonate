@@ -49,6 +49,10 @@ urlpatterns = patterns('',
     ... (all your other urls here) ...
 )
 
+4) If you have a custom user model, add the following to your `settings.py`:
+
+    IMPERSONATE_USER_MODEL = 'youapp.models.UserModel'
+
 
 ** HOW TO USE **
 
