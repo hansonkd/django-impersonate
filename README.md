@@ -228,6 +228,12 @@ To return always to the current page after impersonating a user, use request.pat
 
     <a href="/impersonate/list/?next={{request.path}}">switch user</a>
 
+
+IMPERSONATE_USER_MODEL
+
+A string that represents the model to use in place of the `User` model
+(e.g. 'edumacation.accounts.models.THMUser')
+
 Copyright & Warranty
 --------------------
 All documentation, libraries, and sample code are 
