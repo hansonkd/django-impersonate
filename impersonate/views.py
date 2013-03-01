@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db.models import Q
 from django.template import RequestContext
-from django.contrib.auth.models import User
+from django.db.models.loading import get_model
 from django.shortcuts import get_object_or_404, redirect, render_to_response
 from decorators import allowed_user_required
 from impersonate.helpers import get_redir_path, get_redir_arg, get_paginator,\
@@ -18,7 +18,12 @@ def impersonate(request, uid):
         The middleware will then pick up on it and adjust the
         request object as needed.
     '''
-    new_user = get_object_or_404(User, pk=uid)
+    model_str = getattr(settings, 'IMPERSONATE_USER_MODEL',
+                        'django.contrib.auth.models.User')
+    module, model = model_str.rsplit('.', 1)
+    module = __import__(module, fromlist=[model])
+    Model = getattr(module, model)
+    new_user = get_object_or_404(Model, pk=uid)
     if check_allow_for_user(request, new_user):
         request.session['_impersonate'] = new_user
         request.session.modified = True  # Let's make sure...
