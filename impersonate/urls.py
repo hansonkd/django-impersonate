@@ -1,7 +1,11 @@
 from django.conf.urls.defaults import *
-
+from django.views.generic import RedirectView
+from django.core.urlresolvers import reverse_lazy
 
 urlpatterns = patterns('impersonate.views',
+    url(r'^$', 'impersonate_index',
+        {'template': 'impersonate/index.html'},
+        name='impersonate-base'),
     url(r'^(?P<uid>\d+)/$',
         'impersonate',
         name='impersonate-start'),

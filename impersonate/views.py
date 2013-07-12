@@ -8,7 +8,12 @@ from impersonate.helpers import get_redir_path, get_redir_arg, get_paginator,\
                                 get_redir_field, check_allow_for_user,\
                                 users_impersonable
 
-
+@allowed_user_required
+def impersonate_index(request, template):
+    ''' Index for app.
+    '''
+    return render_to_response(template, {}, context_instance=RequestContext(request))
+    
 @allowed_user_required
 def impersonate(request, uid):
     ''' Takes in the UID of the user to impersonate.
