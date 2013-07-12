@@ -8,10 +8,7 @@ non-superuser accounts.
 Dependencies
 ------------
 
-It was written for Python 2.4+ and Django 1.2.4 but it should 
-work just fine with Django 1.1+
-
-It depends on your project using the django.contrib.session framework.
+This version is written for Python 2.7.x and Django >= 1.5.x
 
 
 Install
