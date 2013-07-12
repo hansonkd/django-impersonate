@@ -19,7 +19,7 @@ Install
 
 PIP:
 
-pip install git+https://github.com/tophatmonocle/django-impersonate.git
+pip install git+https://github.com/hansonkd/django-impersonate.git
 
 
 Basic Manual Install:
