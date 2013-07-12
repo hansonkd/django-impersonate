@@ -17,72 +17,67 @@ It depends on your project using the django.contrib.session framework.
 Install
 -------
 
-PIP:
+#### PIP:
 
-pip install git+https://github.com/hansonkd/django-impersonate.git
+    pip install git+https://github.com/hansonkd/django-impersonate.git
 
 
-Basic Manual Install:
+#### Basic Manual Install:
 
-  $ python setup.py build
-  $ sudo python setup.py install
+    $ python setup.py build
+    $ sudo python setup.py install
 
-Alternative Install (Manually):
+#### Alternative Install (Manually):
 
 Place impersonate directory in your Python path. Either in your Python 
 installs site-packages directory or set your $PYTHONPATH environment 
 variable to include a directory where the webutils directory lives.
 
+1. Add 'impersonate' to your `INSTALLED_APPS`
+2. Add 'impersonate.middleware.ImpersonateMiddleware' to your `MIDDLEWARE_CLASSES`
+3. If you have a custom user model, add the following to your `settings.py`:
 
-Use
----
-1) Add 'impersonate' to your INSTALLED_APPS
+    `IMPERSONATE_USER_MODEL = 'yourapp.models.UserModel'`
+    
+4. Add 'impersonate.urls' somewhere in your url structure. Example:
 
-2) Add 'impersonate.middleware.ImpersonateMiddleware' to your MIDDLEWARE_CLASSES
-
-3) Add 'impersonate.urls' somewhere in your url structure. Example:
-
-urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^impersonate/', include('impersonate.urls')),
-
-    ... (all your other urls here) ...
-)
-
-4) If you have a custom user model, add the following to your `settings.py`:
-
-    IMPERSONATE_USER_MODEL = 'yourapp.models.UserModel'
+        urlpatterns = patterns('',
+            url(r'^admin/', include(admin.site.urls)),
+            url(r'^impersonate/', include('impersonate.urls')),
+            ... (all your other urls here) ...
+         )
 
 
-** HOW TO USE **
+How to use
+----------
 
-== You can now impersonate another user by hitting the following path:
+#### You can now impersonate another user by hitting the following path:
 
-/impersonate/<user-id>/
+    /impersonate/<user-id>/
 
-Replace <user-id> with the user id of the user you want to impersonate.
+Replace `<user-id>` with the user id of the user you want to impersonate.
 
 While in impersonation "mode" the request.user object will have an 
 "is_impersonate" attribute set to True. So if you wanted to check in your 
 templates or view, you just do something like...
 
-{% if user.is_impersonate %} .... {% endif %}
+    {% if user.is_impersonate %} .... {% endif %}
 
-You can reference this URL with reverse() or the {% url %} template tag 
+You can reference this URL with `reverse()` or the `{% url %}` template tag 
 as 'impersonate-start'
 
 
-== To remove the impersonation, hit the following path:
+#### To remove the impersonation, hit the following path:
 
-/impersonate/stop/
+    /impersonate/stop/
 
-You can reference this URL with reverse() or the {% url %} template tag 
+You can reference this URL with `reverse()` or the `{% url %}` template tag 
 as 'impersonate-stop'
 
 
-== To list all users you can go to:
+#### To list all users you can go to:
 
-/impersonate/list/
+    /impersonate/list/
 
 This will render the template 'impersonate/list_users.html' and will pass 
 the following in the context:
@@ -92,13 +87,13 @@ the following in the context:
 * page - Current page of objects (from Paginator) 
 * page_number - Current page number, defaults to 1
 
-You can reference this URL with reverse() or the {% url %} template tag
+You can reference this URL with `reverse()` or the `{% url %}` template tag
 as 'impersonate-list'
 
 
-== To search all users you can go to:
+#### To search all users you can go to:
 
-/impersonate/search/
+    /impersonate/search/
 
 This will render the template 'impersonate/search_users.html' and will pass 
 the following in the context:
@@ -113,22 +108,22 @@ The view will expect a GET request and look for the 'q' variable being passed.
 If present, it will search the user entries with the value of 'q'. The fields 
 searched are:
 
-User.username, User.first_name, User.last_name, User.email
+    User.username, User.first_name, User.last_name, User.email
 
-You can reference this URL with reverse() or the {% url %} template tag
+You can reference this URL with `reverse()` or the `{% url %}` template tag
 as 'impersonate-search'
 
 
-== To allow some users to impersonate other users
+#### To allow some users to impersonate other users
 
 You can optionally allow only some non-superuser and non-staff users to impersonate by
-adding a IMPERSONATE_CUSTOM_ALLOW setting. Create a function that takes a
+adding a `IMPERSONATE_CUSTOM_ALLOW` setting. Create a function that takes a
 request object, and based on your rules, returns True if the user is allowed to
 impersonate or not.
 
-== To limit what users a user can impersonate
+#### To limit what users a user can impersonate
 
-By, optionally, setting the IMPERSONATE_CUSTOM_USER_QUERYSET you can control
+By, optionally, setting the `IMPERSONATE_CUSTOM_USER_QUERYSET` you can control
 what users can be impersonated. It takes a request object of the user, and
 returns a QuerySet of users. This is used when searching for users to
 impersonate, when listing what users to impersonate, and when trying to start
@@ -141,48 +136,47 @@ Settings
 The following settings are available for django-impersonate:
 
 
-IMPERSONATE_REDIRECT_URL
+#####`IMPERSONATE_REDIRECT_URL`
 
 This is the URL you want to be redirected to after you have chosen to 
 impersonate another user. If this is not present it will check for 
-the LOGIN_REDIRECT_URL setting and fall back to '/' if neither is 
+the `LOGIN_REDIRECT_URL` setting and fall back to '/' if neither is 
 present. Value should be a string containing the redirect path.
 
 
-IMPERSONATE_PAGINATE_COUNT
+#####`IMPERSONATE_PAGINATE_COUNT`
 
 This is the number of users to paginate by when using the list or 
 search views. This defaults to 20. Value should be an integer.
 
 
-IMPERSONATE_REQUIRE_SUPERUSER
+#####`IMPERSONATE_REQUIRE_SUPERUSER`
 
-If this is set to True, then only users who have 'is_superuser' set 
-to True will be allowed to impersonate other users. Default is False. 
-If False, then any 'is_staff' user will be able to impersonate other 
+If this is set to `True`, then only users who have `is_superuser` set 
+to `True` will be allowed to impersonate other users. Default is False. 
+If `False`, then any `is_staff` user will be able to impersonate other 
 users.
 
-Note: Regardless of this setting, a 'is_staff' user will *not* be 
-allowed to impersonate a 'is_superuser' user.
+Note: Regardless of this setting, a `is_staff` user will *not* be 
+allowed to impersonate a `is_superuser` user.
 
-Value should be a boolean (True/False)
+Value should be a boolean (`True`/`False`)
 
-If the IMPERSONATE_CUSTOM_ALLOW is set, then that custom function is used, and
+If the `IMPERSONATE_CUSTOM_ALLOW` is set, then that custom function is used, and
 this setting is ignored.
 
-
-IMPERSONATE_URI_EXCLUSIONS
+#####`IMPERSONATE_URI_EXCLUSIONS`
 
 Set to a list/tuple of url patterns that, if matched, user 
 impersonation is not completed. It defaults to:
 
-(r'^admin/',)
+    (r'^admin/',)
 
 If you do not want to use even the default exclusions then set 
 the setting to an emply list/tuple.
 
 
-IMPERSONATE_CUSTOM_USER_QUERYSET
+#####`IMPERSONATE_CUSTOM_USER_QUERYSET`
 
 A string that represents a function (e.g. 'module.submodule.mod.function_name')
 that allows more fine grained control over what users a user can impersonate.
@@ -191,28 +185,28 @@ the users in this queryset can be impersonated.
 
 This function will not be called when the request has an unauthorised users,
 and will only be called when the user is allowed to impersonate (cf.
-IMPERSONATE_REQUIRE_SUPERUSER and IMPERSONATE_CUSTOM_ALLOW )
+`IMPERSONATE_REQUIRE_SUPERUSER` and `IMPERSONATE_CUSTOM_ALLOW` )
 
 Regardless of what this function returns, a user cannot impersonate a
 superuser, even if there are superusers in the returned QuerySet.
 
 It is optional, and if it is not present, the user can impersonate any user
-(i.e. the default is User.objects.all())
+(i.e. the default is `User.objects.all()`)
 
 
-IMPERSONATE_CUSTOM_ALLOW
+#####`IMPERSONATE_CUSTOM_ALLOW`
 
 A string that represents a function (e.g. 'module.submodule.mod.function_name')
 that allows more fine grained control over who can use the impersonation. It
 takes one argument, the request object, and should return True to allow
 impesonation. Regardless of this setting, the user must be logged in to
-impersonate. If this setting is used, IMPERSONATE_REQUIRE_SUPERUSER is ignored.
+impersonate. If this setting is used, `IMPERSONATE_REQUIRE_SUPERUSER` is ignored.
 
 It is optional, and if it is not present, the previous rules about superuser
-and IMPERSONATE_REQUIRE_SUPERUSER apply.
+and `IMPERSONATE_REQUIRE_SUPERUSER` apply.
 
 
-IMPERSONATE_REDIRECT_FIELD_NAME
+#####`IMPERSONATE_REDIRECT_FIELD_NAME`
 
 A string that represents the name of a request (GET) parameter which contains
 the URL to redirect to after impersonating a user. This can be used to redirect
@@ -229,7 +223,7 @@ To return always to the current page after impersonating a user, use request.pat
     <a href="/impersonate/list/?next={{request.path}}">switch user</a>
 
 
-IMPERSONATE_USER_MODEL
+#####`IMPERSONATE_USER_MODEL`
 
 A string that represents the model to use in place of the `User` model
 (e.g. 'edumacation.accounts.models.THMUser')
