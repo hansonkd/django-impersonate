@@ -25,7 +25,7 @@ def impersonate(request, uid):
     Model = getattr(module, model)
     new_user = get_object_or_404(Model, pk=uid)
     if check_allow_for_user(request, new_user):
-        request.session['_impersonate'] = new_user
+        request.session['_impersonate'] = new_user.pk
         request.session.modified = True  # Let's make sure...
     return redirect(get_redir_path(request))
 

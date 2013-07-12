@@ -7,7 +7,7 @@
 {% if page.object_list %}
   <ul>
     {% for user in page.object_list %}
-      <li><a href="{% url impersonate-start user.id %}{{redirect}}">{{ user.username }}</a> - Impersonate</li>
+      <li><a href="{% url 'impersonate-start' user.id %}{{redirect}}">{{ user.username }}</a> - Impersonate</li>
     {% endfor %}
   </ul>
 {% endif %}
